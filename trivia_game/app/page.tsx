@@ -1,36 +1,160 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        
-        <div className="mx-auto flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            RPI Trivia Game!
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-black dark:text-zinc-50">
-            Test your knowledge on RPI's 200 year long history!
-          </p>
-        </div>
-        <div className="mx-auto flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Start
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+import { useState } from 'react';
+interface Question {
+    question: string;
+    options: string[];
+    answer: string;
 }
+
+const questions: Question[] = [
+    {
+        question: "When was RPI established?",
+        options: ["1800", "1820", "1814", "1824"],
+        answer: "1824",
+    },
+    {
+        question: "What was RPI's original name?",
+        options: ["Rensselaer School", "Rensselaer Institute", "Rensselaer University", "Rensselaer Polytechnic Institute"],
+        answer: "Rensselaer School",
+    },
+    {
+        question: "The freshman dorms were completed in the:",
+        options: ["1940s", "1950s", "1960s", "1970s"],
+        answer: "1950s",
+    },
+];
+
+const QuizApp: React.FC = () => {
+    const [currentQuestion, setCurrentQuestion] = useState < number > (0);
+    const [score, setScore] = useState < number > (0);
+    const [showResult, setShowResult] = useState < boolean > (false);
+
+    const handleAnswer = (option: string) => {
+        if (option === questions[currentQuestion].answer) {
+            setScore(score + 1);
+        }
+        handleNextQuestion();
+    };
+
+    const handleNextQuestion = () => {
+        const nextQuestion = currentQuestion + 1;
+        if (nextQuestion < questions.length) {
+            setCurrentQuestion(nextQuestion);
+        } else {
+            setShowResult(true);
+        }
+    };
+
+    // Inline Style Objects
+    const styles = {
+        container: {
+            display: "flex",
+            flexDirection: "column" as "column",
+            alignItems: "center",
+            justifyContent: "center",
+            minHeight: "100vh",
+            background: "linear-gradient(to bottom right, #D6001C, #ffffff)",
+            padding: "20px",
+            color: "white",
+        },
+        quizBox: {
+            background: "white",
+            color: "#333",
+            padding: "20px",
+            borderRadius: "20px",
+            boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.3)",
+            width: "400px",
+            textAlign: "center" as "center",
+        },
+        questionTitle: {
+            fontSize: "1.5rem",
+            fontWeight: "bold",
+            color: "#D6001C",
+            marginBottom: "15px",
+        },
+        timer: {
+            fontSize: "1.2rem",
+            fontWeight: "bold",
+            color: "red",
+            marginBottom: "15px",
+        },
+        optionsContainer: {
+            display: "flex",
+            flexDirection: "column" as "column",
+            gap: "10px",
+        },
+        optionButton: {
+            padding: "12px 16px",
+            fontSize: "1rem",
+            background: "#D6001C",
+            color: "white",
+            border: "none",
+            borderRadius: "10px",
+            cursor: "pointer",
+            transition: "0.3s",
+        },
+        optionButtonHover: {
+            background: "#D6001C",
+        },
+        resultContainer: {
+            textAlign: "center" as "center",
+        },
+        restartButton: {
+            marginTop: "20px",
+            padding: "12px 16px",
+            fontSize: "1rem",
+            background: "#D6001C",
+            color: "white",
+            border: "none",
+            borderRadius: "10px",
+            cursor: "pointer",
+            transition: "0.3s",
+        },
+    };
+
+    return (
+        <div style={styles.container}>
+            <div style={styles.quizBox}>
+                {showResult ? (
+                    <div style={styles.resultContainer}>
+                        <h2 style={styles.questionTitle}>Quiz Completed!</h2>
+                        <p className="text-xl mt-2">
+                            Your Score: {score} / {questions.length}
+                        </p>
+                        <button
+                            style={styles.restartButton}
+                            onClick={() => {
+                                setCurrentQuestion(0);
+                                setScore(0);
+                                setShowResult(false);
+                            }}
+                        >
+                            Restart Quiz
+                        </button>
+                    </div>
+                ) : (
+                    <div style={{ textAlign: "center" }}>
+                        <h2 style={styles.questionTitle}>{questions[currentQuestion].question}</h2>
+                        <div style={styles.optionsContainer}>
+                            {questions[currentQuestion].options.map((option) => (
+                                <button
+                                    key={option}
+                                    style={styles.optionButton}
+                                    onMouseOver={(e) => (e.currentTarget.style.background = 
+                                        styles.optionButtonHover.background)}
+                                    onMouseOut={(e) => (e.currentTarget.style.background = 
+                                        styles.optionButton.background)}
+                                    onClick={() => handleAnswer(option)}
+                                >
+                                    {option}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+export default QuizApp;
