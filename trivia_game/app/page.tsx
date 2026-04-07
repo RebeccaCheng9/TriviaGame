@@ -15,7 +15,7 @@ const questions: Question[] = [
         question: "When was RPI established?",
         options: ["1800", "1820", "1814", "1824"],
         answer: "1824",
-        funfact: "Did you know that RPI is the oldest technological research university in the US!",
+        funfact: "Did you know that RPI is the oldest technological research university in the US?!",
     },
     {
         question: "True or False: Majoring in mechanical engineering was always offered.",
@@ -45,7 +45,7 @@ const questions: Question[] = [
         question: "George W. G. Ferris (RPI Class of 1881) is known for creating the first...?",
         options: ["Swing Tower", "Rollercoaster", "Merry-go-Round", "Ferris Wheel"],
         answer: "Ferris Wheel",
-        funfact: "Another notible RPI alumni include Steven Sasson (class of 1972), the inventor of the first digital camera.",
+        funfact: "Another notible RPI alumni is Steven Sasson (class of 1972), the inventor of the first digital camera.",
     },
     {
         question: "True or False: Puckman was not the first mascot.",
@@ -71,25 +71,19 @@ const QuizApp: React.FC = () => {
     const [currentQuestion, setCurrentQuestion] = useState < number > (0);
     const [score, setScore] = useState < number > (0);
     const [showResult, setShowResult] = useState < boolean > (false);
+    const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
 
     const handleAnswer = (option: string) => {
+        if (selectedAnswer) return; // Prevent multiple clicks
+        setSelectedAnswer(option);
         if (option === questions[currentQuestion].answer) {
             setScore(score + 1);
         }
-        handleNextQuestion();
     };
-    /* 
-    const revealAnswer = (option: string) => {
-        questions[currentQuestion].answer.style.background = #00d627;
-        if (option === questions[currentQuestion].answer) {
-            setScore(score + 1);
-        }
-
-    }
-    */ 
 
     const handleNextQuestion = () => {
         const nextQuestion = currentQuestion + 1;
+        setSelectedAnswer(null); // Reset for the next question
         if (nextQuestion < questions.length) {
             setCurrentQuestion(nextQuestion);
         } else {
@@ -105,7 +99,7 @@ const QuizApp: React.FC = () => {
             alignItems: "center", 
             justifyContent: "center",
             minHeight: "100vh",
-            background: "linear-gradient(to bottom, #D6001C 0%, #e8e8e8 95%, #ffffff 100%)",
+            background: "linear-gradient(to bottom, #e8e8e8 0%, #ffffff 100%)",
             padding: "20px",
             color: "white",
         },
@@ -133,13 +127,14 @@ const QuizApp: React.FC = () => {
         optionButton: {
             padding: "12px 16px",
             fontFamily: "Raleway",
-            fontSize: "1.5rem",
+            fontSize: "1.25rem",
             background: "#D6001C",
             color: "white",
             border: "none",
             borderRadius: "10px",
             cursor: "pointer",
             transition: "0.3s",
+            opacity: "1.0",
         },
         optionButtonHover: {
             background: "#D6001C",
@@ -168,7 +163,7 @@ const QuizApp: React.FC = () => {
                 {showResult ? (
                     <div style={styles.resultContainer}>
                         <h2 style={styles.questionTitle}>Quiz Completed!</h2>
-                        <p className="text-xl mt-2">
+                        <p style = {{ fontSize: "1.25rem", fontFamily: "Raleway", marginTop: "8px"}}>
                             Your Score: {score} / {questions.length}
                         </p>
                         <button
@@ -186,19 +181,41 @@ const QuizApp: React.FC = () => {
                     <div style={{ textAlign: "center" }}>
                         <h2 style={styles.questionTitle}>{questions[currentQuestion].question}</h2>
                         <div style={styles.optionsContainer}>
-                            {questions[currentQuestion].options.map((option) => (
+                            {questions[currentQuestion].options.map((option) => {
+                                let buttonStyle = { ...styles.optionButton };
+                                if (selectedAnswer) {
+                                    if (option === questions[currentQuestion].answer) {
+                                        buttonStyle.background = "#3cd658";
+                                    } else if (option === selectedAnswer) {
+                                        buttonStyle.background = "#ef4444";
+                                    } else {
+                                        buttonStyle.opacity = "0.5"; //dim the other buttons
+                                    }
+                                }
+                                return (
+                                    <button
+                                        key={option}
+                                        style={buttonStyle}
+                                        disabled={!!selectedAnswer}
+                                        onClick={() => handleAnswer(option)}
+                                    >
+                                        {option}
+                                    </button>
+                                );   
+                            })}    
+                        {selectedAnswer && (
+                            <div style={{ marginTop: "20px", color: "#333"}}>
+                                <p style = {{ fontSize: "1.25rem", fontWeight: "bold", fontFamily: "Raleway", marginBottom: "10px"}}>
+                                    {questions[currentQuestion].funfact}
+                                </p>
                                 <button
-                                    key={option}
-                                    style={styles.optionButton}
-                                    onMouseOver={(e) => (e.currentTarget.style.background = 
-                                        styles.optionButtonHover.background)}
-                                    onMouseOut={(e) => (e.currentTarget.style.background = 
-                                        styles.optionButton.background)}
-                                    onClick={() => handleAnswer(option)}
+                                    style={styles.restartButton}
+                                    onClick={handleNextQuestion}
                                 >
-                                    {option}
+                                    {currentQuestion === questions.length - 1 ? "See Results" : "Next Question"}
                                 </button>
-                            ))}
+                            </div>    
+                        )}
                         </div>
                     </div>
                 )}
