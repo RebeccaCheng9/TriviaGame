@@ -39,7 +39,7 @@
   .quizBox {
     background: white;
     color: #333;
-    padding: 20px;
+    padding: 10px 20px 20px;
     border-radius: 20px;
     box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5);
     width: 45%;

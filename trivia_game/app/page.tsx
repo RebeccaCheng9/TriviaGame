@@ -10,6 +10,7 @@ const QuizApp: React.FC = () => {
     const [showResult, setShowResult] = useState < boolean > (false);
     const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
     const [showStart, setShowStart] = useState<boolean>(false);
+    const [questionCount, setQuestionCount] = useState < number > (1);
 
     const handleAnswer = (option: string) => {
         if (selectedAnswer) return; // Prevent multiple clicks
@@ -21,6 +22,7 @@ const QuizApp: React.FC = () => {
 
     const handleNextQuestion = () => {
         const nextQuestion = currentQuestion + 1;
+        setQuestionCount(questionCount + 1);
         setSelectedAnswer(null); // Reset for the next question
         if (nextQuestion < questions.length) {
             setCurrentQuestion(nextQuestion);
@@ -61,13 +63,23 @@ const QuizApp: React.FC = () => {
                         </p>    
                         <button
                             className="restartButton"
-                            onClick={() => {handleStartGame}}
+                            onClick={() => {
+                                setShowStart(false);
+                                setScore(0);
+                                setCurrentQuestion(0);
+                                setSelectedAnswer(null);
+                                setShowResult(false);
+                                setQuestionCount(1);
+                            }}
                         >
                             Restart
                         </button>
                     </div>
                 ) : (
                     <div className="text-center">
+                        <p style = {{ fontSize: "1.25rem", fontFamily: "Raleway", marginTop: "8px"}}>
+                            Question {questionCount} out of {questions.length}
+                        </p>
                         <h2 className="questionTitle">{questions[currentQuestion].question}</h2>
                         <div className="optionsContainer">
                             {questions[currentQuestion].options.map((option) => {
