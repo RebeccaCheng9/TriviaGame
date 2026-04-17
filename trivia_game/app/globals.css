@@ -1,26 +1,118 @@
 @import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer components {
+  .startScreen {
+    text-align: center;
+    font-family: "Raleway", sans-serif;
   }
-}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  .startTitle {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #D6001C;
+    margin-bottom: 20px;
+  }
+
+  .startDescription {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 30px;
+    line-height: 1.5;
+  }
+  
+  .quizContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center;
+    min-height: 100vh;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/poly_old_newspaper.jpg');
+    background-size: cover;
+    background-position: 50% 20%;
+    background-repeat: no-repeat;
+    padding: 20px;
+  }
+
+  .quizBox {
+    background: white;
+    color: #333;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5);
+    width: 45%;
+    text-align: center;
+  }
+
+  .questionTitle {
+    font-family: 'Raleway', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #D6001C;
+    margin-bottom: 15px;
+  }
+
+  .optionsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .optionButton {
+    padding: 12px 16px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 1.25rem;
+    background-color: #D6001C;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .optionButton:hover {
+    background-color: #b30018;
+    transform: translateY(-2px);
+  }
+
+  .optionCorrect {
+    background-color: #3cd658 !important;
+  }
+
+  .optionCorrect:hover {
+    transform: translateY(-2px);
+  }
+
+  .optionWrong {
+    background-color: #ef4444 !important;
+  }
+
+  .optionDimmed {
+    opacity: 0.5;
+  }
+
+  .restartButton {
+    margin-top: 20px;
+    padding: 12px 16px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 1rem;
+    background-color: #D6001C;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .restartButton:hover {
+    background-color: #b30018;
+    transform: translateY(-1px);
+    box-shadow: 0px 4px 10px rgba(214, 0, 28, 0.3);
+  }
+
+  .restartButton:active {
+    transform: translateY(0);
+  }
 }

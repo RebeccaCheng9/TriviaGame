@@ -43,10 +43,10 @@ export const questions: Question[] = [
         funfact: "Additionally, the average age was 32, and over 40% were married.",
     },
     {
-        question: "George W. G. Ferris (RPI Class of 1881) is known for creating the first...?",
-        options: ["Swing Tower", "Rollercoaster", "Merry-go-Round", "Ferris Wheel"],
-        answer: "Ferris Wheel",
-        funfact: "Another notible RPI alumni is Steven Sasson (class of 1972), the inventor of the first digital camera.",
+        question: "Steven Sasson (RPI Class of 1972) is known for creating the first...?",
+        options: ["Digital Camera", "Digital Watch", "VCR", "Cell Phone"],
+        answer: "Digital Camera",
+        funfact: "Another notible RPI alumni is George W. G. Ferris (Class of 1881), the inventor of the first Ferris Wheel.",
     },
     {
         question: "True or False: Puckman was not the first mascot.",
@@ -67,7 +67,13 @@ export const questions: Question[] = [
         funfact: "All the options above were once the name of RPI except for Rensselaer University!",
     },
     {
-        question: "The freshman dorms were completed in the:",
+        question: "What is the most recently constructed building on campus?",
+        options: ["EMPAC", "Barton Hall", "ECAV", "CBIS"],
+        answer: "ECAV",
+        funfact: "Did you know ECAV is LEED gold status certified?!",
+    },
+    {
+        question: "The first freshman dorms were completed in the:",
         options: ["1940s", "1950s", "1960s", "1970s"],
         answer: "1950s",
         funfact: "The freshman dorms have been around for over 75 years!",
@@ -77,5 +83,17 @@ export const questions: Question[] = [
         options: ["Swimming Pool", "Basketball Court", "Running Track", "Tennis Court"],
         answer: "Swimming Pool",
         funfact: "In addition to the swimming pool, there are also four bowling alleys.",
+    },
+    {
+        question: "The Mason Laboratory, demolished in May of 1975, contained labs for mainly which department?",
+        options: ["Physics", "Chemical Engineering", "Chemistry", "Nuclear Engineering"],
+        answer: "Nuclear Engineering",
+        funfact: "The Mason Laboratory was originally purchased to provide postwar housing for 230 students in the late 1940s.",
+    },
+    {
+        question: "Which freshman dorm is named after a geologist with one of the largest fossil collections featured in the American Museum of Natural History?",
+        options: ["Crockett Hall", "Barton Hall", "Bray Hall", "Hall Hall"],
+        answer: "Hall Hall",
+        funfact: "Did you know James Hall studied under Amos Eaton (another geologist)?!",
     },
 ];

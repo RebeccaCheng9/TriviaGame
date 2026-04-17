@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { questions} from './questions';
-import { ProgressBar, Progress} from "@/components/ProgressBar";
 import "tailwindcss";
 
 const QuizApp: React.FC = () => {
@@ -10,8 +9,7 @@ const QuizApp: React.FC = () => {
     const [score, setScore] = useState < number > (0);
     const [showResult, setShowResult] = useState < boolean > (false);
     const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
-
-    const user: Progress = { value: score, max: 100 };
+    const [showStart, setShowStart] = useState<boolean>(false);
 
     const handleAnswer = (option: string) => {
         if (selectedAnswer) return; // Prevent multiple clicks
@@ -31,111 +29,62 @@ const QuizApp: React.FC = () => {
         }
     };
 
-    // Inline Style Objects
-    const styles = {
-        container: {
-            display: "flex",
-            flexDirection: "column" as "column",
-            alignItems: "center", 
-            justifyContent: "center",
-            minHeight: "100vh",
-            background: "linear-gradient(to bottom, #e8e8e8 0%, #ffffff 100%)",
-            padding: "20px",
-            color: "white",
-        },
-        quizBox: {
-            background: "white",
-            color: "#333",
-            padding: "20px",
-            borderRadius: "20px",
-            boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.3)",
-            width: "40%",
-            textAlign: "center" as "center",
-        },
-        questionTitle: {
-            fontFamily: "Raleway",
-            fontSize: "2rem",
-            fontWeight: "bold",
-            color: "#D6001C",
-            marginBottom: "15px",
-        },
-        optionsContainer: {
-            display: "flex",
-            flexDirection: "column" as "column",
-            gap: "10px",
-        },
-        optionButton: {
-            padding: "12px 16px",
-            fontFamily: "Raleway",
-            fontSize: "1.25rem",
-            background: "#D6001C",
-            color: "white",
-            border: "none",
-            borderRadius: "10px",
-            cursor: "pointer",
-            transition: "0.3s",
-            opacity: "1.0",
-        },
-        optionButtonHover: {
-            background: "#D6001C",
-        },
-        resultContainer: {
-            textAlign: "center" as "center",
-            fontFamily: "Raleway",
-        },
-        restartButton: {
-            marginTop: "20px",
-            padding: "12px 16px",
-            fontFamily: "Raleway",
-            fontSize: "1rem",
-            background: "#D6001C",
-            color: "white",
-            border: "none",
-            borderRadius: "10px",
-            cursor: "pointer",
-            transition: "0.3s",
-        },
+    const handleStartGame = () => {
+        setScore(0);
+        setCurrentQuestion(0);
+        setSelectedAnswer(null);
+        setShowResult(false);
+        setShowStart(true);
     };
 
     return (
-        <div style={styles.container}>
-            <div style={styles.quizBox}>
-                {showResult ? (
-                    <div style={styles.resultContainer}>
-                        <h2 style={styles.questionTitle}>Quiz Completed!</h2>
-                        <p style = {{ fontSize: "1.25rem", fontFamily: "Raleway", marginTop: "8px"}}>
-                            Score: {score} / {questions.length}
+        <div className="quizContainer">
+            <div className="quizBox">
+                {!showStart ? (
+                <div className = "startScreen">
+                    <h1 className = "startTitle">RPI Trivia Game</h1>
+                    <p className = "startDescription">Test how well you know RPI's rich history</p>
+                    <button className="restartButton" onClick={handleStartGame}>Start Quiz</button>
+                </div>
+                ) : showResult ? (
+                    <div className="font-raleway">
+                        <h2 className="questionTitle">Quiz Completed!</h2>
+                        <div style={{ width: "100%", backgroundColor: "#e0e0e0", borderRadius: "10px", height: "20px", marginTop: "20px",overflow: "hidden" }}>
+                            {/* The Actual Progress Fill */}
+                            <div style={{ width: `${(score / questions.length) * 100}%`, backgroundColor: "#3cd658", height: "100%", transition: "width 0.5s ease-in-out" }} />
+                        </div>
+                        <p style={{ fontSize: "1.5rem", fontFamily: "Raleway", fontWeight: "bold", marginTop: "10px",color: "#333"}}>
+                            {Math.round((score / questions.length) * 100)}%
                         </p>
+                        <p style = {{ fontSize: "1.25rem", fontFamily: "Raleway", marginTop: "8px"}}>
+                            You got {score} out of {questions.length} correct!
+                        </p>    
                         <button
-                            style={styles.restartButton}
-                            onClick={() => {
-                                setCurrentQuestion(0);
-                                setScore(0);
-                                setShowResult(false);
-                            }}
+                            className="restartButton"
+                            onClick={() => {handleStartGame}}
                         >
                             Restart
                         </button>
                     </div>
                 ) : (
-                    <div style={{ textAlign: "center" }}>
-                        <h2 style={styles.questionTitle}>{questions[currentQuestion].question}</h2>
-                        <div style={styles.optionsContainer}>
+                    <div className="text-center">
+                        <h2 className="questionTitle">{questions[currentQuestion].question}</h2>
+                        <div className="optionsContainer">
                             {questions[currentQuestion].options.map((option) => {
-                                let buttonStyle = { ...styles.optionButton };
+                                let buttonClass = "optionButton";
                                 if (selectedAnswer) {
                                     if (option === questions[currentQuestion].answer) {
-                                        buttonStyle.background = "#3cd658";
+                                        buttonClass += " optionCorrect";
                                     } else if (option === selectedAnswer) {
-                                        buttonStyle.background = "#ef4444";
+                                        buttonClass += " optionWrong";
                                     } else {
-                                        buttonStyle.opacity = "0.5"; //dim the other buttons
+                                        buttonClass += " optionDimmed";
                                     }
                                 }
                                 return (
                                     <button
                                         key={option}
-                                        style={buttonStyle}
+                                        className={buttonClass}
                                         disabled={!!selectedAnswer}
                                         onClick={() => handleAnswer(option)}
                                     >
@@ -143,19 +92,19 @@ const QuizApp: React.FC = () => {
                                     </button>
                                 );   
                             })}    
-                        {selectedAnswer && (
-                            <div style={{ marginTop: "20px", color: "#333"}}>
-                                <p style = {{ fontSize: "1.25rem", fontWeight: "bold", fontFamily: "Raleway", marginBottom: "10px"}}>
-                                    {questions[currentQuestion].funfact}
-                                </p>
-                                <button
-                                    style={styles.restartButton}
-                                    onClick={handleNextQuestion}
-                                >
-                                    {currentQuestion === questions.length - 1 ? "See Results" : "Next Question"}
-                                </button>
-                            </div>    
-                        )}
+                            {selectedAnswer && (
+                                <div style={{ marginTop: "20px", color: "#333"}}>
+                                    <p style = {{ fontSize: "1.25rem", fontWeight: "bold", fontFamily: "Raleway", marginBottom: "10px"}}>
+                                        {questions[currentQuestion].funfact}
+                                    </p>
+                                    <button
+                                        className="restartButton"
+                                        onClick={handleNextQuestion}
+                                    >
+                                        {currentQuestion === questions.length - 1 ? "See Results" : "Next Question"}
+                                    </button>
+                                </div>    
+                            )}
                         </div>
                     </div>
                 )}
