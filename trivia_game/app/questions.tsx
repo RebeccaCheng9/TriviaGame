@@ -10,7 +10,7 @@ export const questions: Question[] = [
         question: "When was RPI established?",
         options: ["1800", "1820", "1814", "1824"],
         answer: "1824",
-        funfact: "Did you know that RPI is the oldest technological research university in the US?!",
+        funfact: "RPI is the oldest technological research university in the US?!",
     },
     {
         question: "True or False: Majoring in mechanical engineering was always offered.",
@@ -25,10 +25,22 @@ export const questions: Question[] = [
         funfact: "Stephen Van Rensselaer was an influential politician who served in the House of Representatives from 1822 - 1829.",
     },
     {
+        question: "Why were the Rensselaerwyck dorms demolished in the late 1900s?",
+        options: ["Due to a fire", "To make room for athletic fields", "Due to flooding", "To make room for more laboratories"],
+        answer: "To make room for athletic fields",
+        funfact: "The Rensselaerwyck dorms were primarily for married students after WWII, and the area even had a nursery school.",
+    },
+    {
         question: "Which dormitory was built in 1932, converted into a laboratory in 1961, before converting back to student housing?",
         options: ["E-complex", "North Hall", "Quad", "Blitman"],
         answer: "North Hall",
-        funfact: "Did you know that each unit in North Hall and E-complex is named after an RPI alumni that became a president of a railroad company?",
+        funfact: "Each unit in North Hall and E-complex is named after an RPI alumni that became a president of a railroad company.",
+    },
+    {
+        question: "True or False: Just like all the other buildings, J-ROWL had a traditional ribbon-cutting ceremony in 1961.",
+        options: ["True", "False"],
+        answer: "False",
+        funfact: "To celebrate the addition of the Jonsson-Rowland Science Center, RPI used a chain and a blow torch.",
     },
     {
         question: "The Polytechnic, the school newspaper, has had continous publication since what year?",
@@ -37,10 +49,16 @@ export const questions: Question[] = [
         funfact: "You are actually using the Polytechnic website right now!!",
     },
     {
+        question: "What ice cream shop used to be available to students in the Union?",
+        options: ["Dairy Queen", "Ben and Jerry's", "Baskin-Robbins", "Carvel"],
+        answer: "Ben and Jerry's",
+        funfact: "This was one of the first Ben and Jerry's on a college campus!",
+    },
+    {
         question: "The 1950 graduating class is unique due to the fact that...?",
         options: ["Over 80% were veterans", "Over 60% were female", "Over 70% were atheletes", "Over 50% were younger than 20"],
         answer: "Over 80% were veterans",
-        funfact: "Additionally, the average age was 32, and over 40% were married.",
+        funfact: "The average age for the 1950 graduating class was 32, and over 40% were married.",
     },
     {
         question: "Steven Sasson (RPI Class of 1972) is known for creating the first...?",
@@ -70,7 +88,7 @@ export const questions: Question[] = [
         question: "What is the most recently constructed building on campus?",
         options: ["EMPAC", "Barton Hall", "ECAV", "CBIS"],
         answer: "ECAV",
-        funfact: "Did you know ECAV is LEED gold status certified?!",
+        funfact: "ECAV is LEED gold status certified!",
     },
     {
         question: "The first freshman dorms were completed in the:",
@@ -85,15 +103,27 @@ export const questions: Question[] = [
         funfact: "In addition to the swimming pool, there are also four bowling alleys.",
     },
     {
+        question: "What is RPI's slogan?",
+        options: ["Knowledge is power", "A university for the real world", "Why not change the world?", "Learn to thrive"],
+        answer: "Why not change the world?",
+        funfact: "RPI's motto is \"Knowledge and Thoroughness.\"",
+    },
+    {
         question: "The Mason Laboratory, demolished in May of 1975, contained labs for mainly which department?",
         options: ["Physics", "Chemical Engineering", "Chemistry", "Nuclear Engineering"],
         answer: "Nuclear Engineering",
         funfact: "The Mason Laboratory was originally purchased to provide postwar housing for 230 students in the late 1940s.",
     },
     {
-        question: "Which freshman dorm is named after a geologist with one of the largest fossil collections featured in the American Museum of Natural History?",
+        question: "True or False: An RPI alumni was the inventor of the network email.",
+        options: ["True", "False"],
+        answer: "True",
+        funfact: "Raymond Tomlinson (Class of 1963) is also the reason why email addresses use the \"@\" sign."
+    },
+    {
+        question: "Which freshman dorm is named after a geologist with one of the largest fossil collections currently featured in the American Museum of Natural History?",
         options: ["Crockett Hall", "Barton Hall", "Bray Hall", "Hall Hall"],
         answer: "Hall Hall",
-        funfact: "Did you know James Hall studied under Amos Eaton (another geologist)?!",
+        funfact: "James Hall studied under Amos Eaton (another geologist)?!",
     },
 ];

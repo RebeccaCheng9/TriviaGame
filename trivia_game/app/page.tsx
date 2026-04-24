@@ -45,7 +45,7 @@ const QuizApp: React.FC = () => {
                 {!showStart ? (
                 <div className = "startScreen">
                     <h1 className = "startTitle">RPI Trivia Game</h1>
-                    <p className = "startDescription">Test how well you know RPI's rich history</p>
+                    <p className = "startDescription">Challenge yourself on how well you know the history of RPI with this quick quiz</p>
                     <button className="restartButton" onClick={handleStartGame}>Start Quiz</button>
                 </div>
                 ) : showResult ? (
@@ -105,7 +105,8 @@ const QuizApp: React.FC = () => {
                                 );   
                             })}    
                             {selectedAnswer && (
-                                <div style={{ marginTop: "20px", color: "#333"}}>
+                                <div className="mt-2 pt-4 border-t border-gray-300 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                    <span className="text-red-600 font-bold text-xs uppercase tracking-widest block mb-2">Did you know?</span>
                                     <p style = {{ fontSize: "1.25rem", fontWeight: "bold", fontFamily: "Raleway", marginBottom: "10px"}}>
                                         {questions[currentQuestion].funfact}
                                     </p>
