@@ -6,17 +6,23 @@ import "tailwindcss";
 
 const QuizApp: React.FC = () => {
     const [currentQuestion, setCurrentQuestion] = useState < number > (0);
-    const [score, setScore] = useState < number > (0);
+    const [score, setScore] = useState<Record<string, number>>({});
     const [showResult, setShowResult] = useState < boolean > (false);
     const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
     const [showStart, setShowStart] = useState<boolean>(false);
     const [questionCount, setQuestionCount] = useState < number > (1);
 
+    const totalCorrect = Object.values(score).reduce((acc, val) => acc + val, 0);
+
     const handleAnswer = (option: string) => {
         if (selectedAnswer) return; // Prevent multiple clicks
         setSelectedAnswer(option);
+        const category = questions[currentQuestion].category;
         if (option === questions[currentQuestion].answer) {
-            setScore(score + 1);
+            setScore(prev => ({
+            ...prev,
+            [category]: (prev[category] || 0) + 1
+        }));
         }
     };
 
@@ -32,11 +38,19 @@ const QuizApp: React.FC = () => {
     };
 
     const handleStartGame = () => {
-        setScore(0);
+        setScore({});
         setCurrentQuestion(0);
         setSelectedAnswer(null);
         setShowResult(false);
         setShowStart(true);
+    };
+
+    const getFeedbackMessage = () => {
+        const percentage = (totalCorrect / questions.length) * 100;
+        if (percentage === 100) return "Perfect score! You're an expert at this!";
+        if (percentage >= 80) return "Impressive! You really know a lot.";
+        if (percentage >= 50) return "Not bad! You've got the basics down.";
+        return "RPI has a lot of history to discover.";
     };
 
     return (
@@ -49,23 +63,59 @@ const QuizApp: React.FC = () => {
                     <button className="restartButton" onClick={handleStartGame}>Start Quiz</button>
                 </div>
                 ) : showResult ? (
-                    <div className="font-raleway">
+                    <div className="font-raleway flex flex-col items-center w-full text-center">
                         <h2 className="questionTitle">Quiz Completed!</h2>
                         <div style={{ width: "100%", backgroundColor: "#e0e0e0", borderRadius: "10px", height: "20px", marginTop: "20px",overflow: "hidden" }}>
                             {/* The Actual Progress Fill */}
-                            <div style={{ width: `${(score / questions.length) * 100}%`, backgroundColor: "#3cd658", height: "100%", transition: "width 0.5s ease-in-out" }} />
+                            <div style={{ width: `${(totalCorrect / questions.length) * 100}%`, backgroundColor: "#3cd658", height: "100%", transition: "width 0.5s ease-in-out" }} />
                         </div>
                         <p style={{ fontSize: "1.5rem", fontFamily: "Raleway", fontWeight: "bold", marginTop: "10px",color: "#333"}}>
-                            {Math.round((score / questions.length) * 100)}%
+                            {Math.round((totalCorrect / questions.length) * 100)}%
                         </p>
                         <p style = {{ fontSize: "1.25rem", fontFamily: "Raleway", marginTop: "8px"}}>
-                            You got {score} out of {questions.length} correct!
+                            You got {totalCorrect} out of {questions.length} correct!
+                        </p>
+                        <div className="grid grid-cols-2 gap-4 w-full max-w-md mx-auto mt-6">
+                            {Array.from(new Set(questions.map(q => q.category))).map((cat) => {
+                                // Calculate stats for this specific category
+                                const totalInCategory = questions.filter(q => q.category === cat).length;
+                                const correctInCategory = score[cat] || 0;
+                                const percent = Math.round((correctInCategory / totalInCategory) * 100);
+                                const radius = 30;
+                                const circumference = 2 * Math.PI * radius;
+
+                                return (
+                                    <div key={cat} className="flex flex-col items-center p-3 border rounded-xl bg-gray-50 shadow-sm">
+                                        <span className="font-bold text-sm text-gray-700 mb-2">{cat}</span>
+                                        <div className="relative flex items-center justify-center">
+                                            <svg width="80" height="80" className="transform -rotate-90">
+                                                <circle cx="40" cy="40" r={radius} stroke="#e0e0e0" strokeWidth="5" fill="transparent" />
+                                                <circle
+                                                    cx="40" cy="40" r={radius} stroke="#3cd658" strokeWidth="5" fill="transparent"
+                                                    strokeDasharray={circumference}
+                                                    style={{ 
+                                                        strokeDashoffset: circumference - (percent / 100) * circumference,
+                                                        transition: "stroke-dashoffset 1s ease"
+                                                    }}
+                                                />
+                                            </svg>
+                                            <span className="absolute text-xs font-bold">{percent}%</span>
+                                        </div>
+                                        <span className="text-[10px] uppercase tracking-wider text-gray-600 mt-2">
+                                            {correctInCategory} / {totalInCategory}
+                                        </span>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        <p style={{ fontSize: "1.25rem", color: "#666", fontStyle: "italic", margin: "10px 0" }}>
+                            {getFeedbackMessage()}
                         </p>    
                         <button
                             className="restartButton"
                             onClick={() => {
                                 setShowStart(false);
-                                setScore(0);
+                                setScore({});
                                 setCurrentQuestion(0);
                                 setSelectedAnswer(null);
                                 setShowResult(false);
