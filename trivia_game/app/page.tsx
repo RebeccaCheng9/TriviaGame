@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { questions} from './questions';
 import "tailwindcss";
 
@@ -11,6 +11,7 @@ const QuizApp: React.FC = () => {
     const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
     const [showStart, setShowStart] = useState<boolean>(false);
     const [questionCount, setQuestionCount] = useState < number > (1);
+    const [highScore, setHighScore] = useState<string | null>(null);
 
     const totalCorrect = Object.values(score).reduce((acc, val) => acc + val, 0);
 
@@ -33,6 +34,13 @@ const QuizApp: React.FC = () => {
         if (nextQuestion < questions.length) {
             setCurrentQuestion(nextQuestion);
         } else {
+            const finalScore = Math.round((totalCorrect / questions.length) * 100);
+            const savedScore = localStorage.getItem("rpi_trivia_high_score"); 
+            const existingHighScore = savedScore ? parseInt(savedScore, 10) : 0;
+            /*save high score*/
+            if (finalScore > existingHighScore) {
+                localStorage.setItem("rpi_trivia_high_score", finalScore.toString()); 
+            }
             setShowResult(true);
         }
     };
@@ -53,14 +61,25 @@ const QuizApp: React.FC = () => {
         return "RPI has a lot of history to discover.";
     };
 
+    useEffect(() => {
+        const saved = localStorage.getItem("rpi_trivia_high_score");
+        if (saved) setHighScore(saved);
+    }, [showResult]);
+
     return (
         <div className="quizContainer">
             <div className="quizBox">
                 {!showStart ? (
                 <div className = "startScreen">
                     <h1 className = "startTitle">RPI Trivia Game</h1>
-                    <p className = "startDescription">Challenge yourself on how well you know the history of RPI with this quick quiz</p>
-                    <button className="restartButton" onClick={handleStartGame}>Start Quiz</button>
+                    <p className = "startDescription">Challenge yourself on your knowledge of the history of RPI with this quick quiz</p>
+                    {highScore && (
+                        <div className="mb-4 text-red-600 rounded-lg font-bold text-2xl">Personal Best: {highScore}%</div>
+                    )}
+                    <button 
+                        className="restartButton transition-all duration-300 hover:scale-105 active:scale-95" 
+                        onClick={handleStartGame}>Start Quiz
+                    </button>
                 </div>
                 ) : showResult ? (
                     <div className="font-raleway flex flex-col items-center w-full text-center">
@@ -85,8 +104,8 @@ const QuizApp: React.FC = () => {
                                 const circumference = 2 * Math.PI * radius;
 
                                 return (
-                                    <div key={cat} className="flex flex-col items-center p-3 border rounded-xl bg-gray-50 shadow-sm">
-                                        <span className="font-bold text-sm text-gray-700 mb-2">{cat}</span>
+                                    <div key={cat} className="flex flex-col items-center p-3 border border-gray-600 rounded-xl bg-gray-50 shadow-sm">
+                                        <span className="font-bold text-base text-gray-700 mb-2">{cat}</span>
                                         <div className="relative flex items-center justify-center">
                                             <svg width="80" height="80" className="transform -rotate-90">
                                                 <circle cx="40" cy="40" r={radius} stroke="#e0e0e0" strokeWidth="5" fill="transparent" />
@@ -99,16 +118,16 @@ const QuizApp: React.FC = () => {
                                                     }}
                                                 />
                                             </svg>
-                                            <span className="absolute text-xs font-bold">{percent}%</span>
+                                            <span className="absolute text-sm font-bold">{percent}%</span>
                                         </div>
-                                        <span className="text-[10px] uppercase tracking-wider text-gray-600 mt-2">
+                                        <span className="text-sm uppercase tracking-wider text-gray-600 mt-2">
                                             {correctInCategory} / {totalInCategory}
                                         </span>
                                     </div>
                                 );
                             })}
                         </div>
-                        <p style={{ fontSize: "1.25rem", color: "#666", fontStyle: "italic", margin: "10px 0" }}>
+                        <p style={{ fontSize: "1.25rem", color: "#666", fontStyle: "italic", margin: "5px 0" }}>
                             {getFeedbackMessage()}
                         </p>    
                         <button
